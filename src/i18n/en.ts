@@ -134,7 +134,6 @@ export const en: Dictionary = {
   },
   education: {
     title: 'Education',
-    status: 'In progress',
     degree: "Bachelor's in Computer Science",
     institution: 'Federal University of Mato Grosso do Sul',
     progress: (year, total) => `Year ${year} of ${total}`,
@@ -147,6 +146,7 @@ export const en: Dictionary = {
       exam: 'Cambridge B2 First (FCE)',
       result: 'Certified at C1 level',
       scale: 'Level C1 of C2',
+      certificate: 'View official result',
     },
   },
   projects: {

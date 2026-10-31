@@ -60,7 +60,6 @@ export type Dictionary = {
   }
   education: {
     title: string
-    status: string
     degree: string
     institution: string
     /** Ex.: "2º ano de 4" */
@@ -76,6 +75,8 @@ export type Dictionary = {
       result: string
       /** Rótulo acima da escala A1–C2 */
       scale: string
+      /** Link que abre o PDF do resultado da Cambridge */
+      certificate: string
     }
   }
   projects: {
