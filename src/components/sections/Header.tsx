@@ -120,19 +120,20 @@ export function Header() {
                     href={`#${id}`}
                     aria-current={isActive ? 'true' : undefined}
                     className={cn(
-                      'relative block rounded-full px-4 py-3 whitespace-nowrap type-nav text-white transition-colors xl:px-6',
-                      !isActive && 'hover:bg-white/10',
+                      'relative block rounded-full px-4 py-3 whitespace-nowrap type-nav transition-colors xl:px-6',
+                      isActive ? 'text-white' : 'text-white/70 hover:text-white',
+                      focusRing,
                     )}
                   >
-                    {/* Pílula translúcida que desliza entre os itens */}
+                    {/* Linha azul sob a seção em que o usuário está; desliza entre os itens */}
                     {isActive && (
                       <motion.span
                         layoutId="nav-active"
-                        className="absolute inset-0 rounded-full bg-brand/20 ring-1 ring-white/15"
+                        className="absolute inset-x-4 bottom-1 h-[3px] rounded-full bg-brand xl:inset-x-6"
                         transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                       />
                     )}
-                    <span className="relative">{t.nav[id]}</span>
+                    {t.nav[id]}
                   </a>
                 </li>
               )
@@ -197,8 +198,11 @@ export function Header() {
                       onClick={() => setMenuOpen(false)}
                       aria-current={isActive ? 'true' : undefined}
                       className={cn(
-                        'block rounded-full px-4 py-3 type-nav text-white transition-colors',
-                        isActive ? 'bg-brand/20 ring-1 ring-white/15' : 'hover:bg-white/10',
+                        'relative block rounded-full px-4 py-3 type-nav transition-colors',
+                        // Mesmo sinal da barra do desktop: linha azul, aqui à esquerda do item.
+                        isActive
+                          ? 'text-white before:absolute before:inset-y-3 before:left-1 before:w-[3px] before:rounded-full before:bg-brand'
+                          : 'text-white/70 hover:text-white',
                         focusRing,
                       )}
                     >
