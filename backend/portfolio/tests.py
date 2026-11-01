@@ -64,7 +64,7 @@ class ContactTests(TestCase):
         self.assertFalse(ContactMessage.objects.exists())
 
     def test_email_failure_keeps_message(self):
-        with mock.patch('portfolio.notifications.EmailMessage.send', side_effect=OSError('smtp fora')):
+        with mock.patch('portfolio.notifications.EmailMultiAlternatives.send', side_effect=OSError('smtp fora')):
             self.assertEqual(self.post(VALID).status_code, 201)
         msg = ContactMessage.objects.get()
         self.assertFalse(msg.email_sent)
