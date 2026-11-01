@@ -24,6 +24,15 @@ class ContactTests(TestCase):
         self.assertEqual(mail.outbox[0].to, ['dono@example.com'])
         self.assertEqual(mail.outbox[0].reply_to, ['ana@example.com'])
         self.assertIn('18 99999-0000', mail.outbox[0].body)
+        html, mimetype = mail.outbox[0].alternatives[0]
+        self.assertEqual(mimetype, 'text/html')
+        self.assertIn('https://wa.me/5518999990000', html)
+
+    def test_html_email_escapes_visitor_input(self):
+        self.post({**VALID, 'message': '<script>alert(1)</script>'})
+        html = mail.outbox[0].alternatives[0][0]
+        self.assertNotIn('<script>', html)
+        self.assertIn('&lt;script&gt;', html)
 
     @override_settings(RESEND_API_KEY='re_teste', DEFAULT_FROM_EMAIL='Portfólio <contato@example.com>')
     def test_emails_through_resend_api(self):
@@ -35,6 +44,7 @@ class ContactTests(TestCase):
         self.assertEqual(request.get_header('Authorization'), 'Bearer re_teste')
         self.assertEqual(payload['to'], ['dono@example.com'])
         self.assertEqual(payload['reply_to'], 'ana@example.com')
+        self.assertIn('Ana Souza', payload['html'])
         self.assertTrue(ContactMessage.objects.get().email_sent)
         self.assertEqual(mail.outbox, [])
 

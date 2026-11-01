@@ -1,0 +1,78 @@
+<!doctype html>
+{% comment %}
+  E-mail de aviso de um novo contato. Clientes de e-mail ignoram CSS externo e boa parte do moderno:
+  por isso tabelas e estilos inline. O Django escapa sozinho tudo que veio do formulário.
+{% endcomment %}
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>{{ subject }}</title>
+</head>
+<body style="margin:0;padding:0;background:#f2f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1a1f2b;">
+  <div style="display:none;max-height:0;overflow:hidden;">{{ msg.name }} — {{ msg.message|truncatechars:90 }}</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f4f8;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e3e7ef;">
+
+          <tr>
+            <td style="background:#07204b;padding:24px 28px;">
+              <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#9fb6e0;">Novo contato pelo portfólio</div>
+              <div style="font-size:22px;font-weight:700;color:#ffffff;margin-top:6px;">{{ msg.project }}</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:28px 28px 8px;">
+              <div style="font-size:18px;font-weight:600;">{{ msg.name }}</div>
+              <div style="font-size:14px;color:#5b6475;margin-top:2px;">{{ msg.created_at|date:"d/m/Y \à\s H:i" }}{% if msg.language == 'en' %} · site em inglês{% endif %}</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:16px 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;">
+                <tr>
+                  <td style="padding:6px 0;color:#5b6475;width:110px;">E-mail</td>
+                  <td style="padding:6px 0;"><a href="mailto:{{ msg.email }}" style="color:#003ea6;text-decoration:none;">{{ msg.email }}</a></td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:#5b6475;">WhatsApp</td>
+                  <td style="padding:6px 0;">{% if whatsapp_link %}<a href="{{ whatsapp_link }}" style="color:#003ea6;text-decoration:none;">{{ msg.phone }}</a>{% else %}{{ msg.phone|default:"—" }}{% endif %}</td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:#5b6475;">Localização</td>
+                  <td style="padding:6px 0;">{{ msg.location|default:"—" }}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:8px 28px 24px;">
+              <div style="background:#e4ebf7;border-left:4px solid #003ea6;border-radius:6px;padding:16px 18px;font-size:15px;line-height:1.6;">{{ msg.message|linebreaksbr }}</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:0 28px 28px;">
+              <a href="mailto:{{ msg.email }}?subject={{ reply_subject|urlencode }}" style="display:inline-block;background:#003ea6;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 20px;border-radius:8px;margin:0 8px 8px 0;">Responder por e-mail</a>
+              {% if whatsapp_link %}<a href="{{ whatsapp_link }}" style="display:inline-block;background:#1f9d55;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 20px;border-radius:8px;margin:0 8px 8px 0;">Chamar no WhatsApp</a>{% endif %}
+              {% if panel_link %}<a href="{{ panel_link }}" style="display:inline-block;background:#ffffff;color:#003ea6;text-decoration:none;font-weight:600;font-size:14px;padding:11px 19px;border-radius:8px;border:1px solid #c5d3ec;margin:0 8px 8px 0;">Ver no painel</a>{% endif %}
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:16px 28px;border-top:1px solid #e3e7ef;font-size:12px;color:#8a92a3;">
+              Enviado pelo formulário de luislopes.dev.br. Responder a este e-mail também vai direto para {{ msg.name }}.
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

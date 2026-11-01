@@ -126,6 +126,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 NOTIFY_EMAIL = os.getenv('NOTIFY_EMAIL', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
 RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
+# Endereço público da API, para o botão "Ver no painel" do e-mail. No Render vem sozinho (RENDER_EXTERNAL_URL);
+# com domínio próprio, defina PUBLIC_URL=https://api.seudominio.dev.br.
+PUBLIC_URL = (os.getenv('PUBLIC_URL') or os.getenv('RENDER_EXTERNAL_URL', '')).rstrip('/')
 if os.getenv('EMAIL_HOST'):
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = os.getenv('EMAIL_HOST')

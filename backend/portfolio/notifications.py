@@ -7,7 +7,8 @@ import urllib.error
 import urllib.request
 
 from django.conf import settings
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 logger = logging.getLogger('portfolio')
 
@@ -40,6 +41,15 @@ def notify_owner(msg):
     if not settings.NOTIFY_EMAIL:
         return False
     subject = f'Novo contato pelo portfólio: {msg.project}'
+    phone = normalize_phone(msg.phone)
+    html = render_to_string('portfolio/email/contact.html', {
+        'msg': msg,
+        'subject': subject,
+        'reply_subject': f'Re: {msg.project}',
+        'whatsapp_link': f'https://wa.me/{phone}' if phone else '',
+        'panel_link': f'{settings.PUBLIC_URL}/admin/portfolio/contactmessage/{msg.pk}/change/' if settings.PUBLIC_URL else '',
+    })
+    # Versão em texto puro: aparece em clientes que não mostram HTML e ajuda a não cair no spam.
     body = '\n'.join([
         f'Nome: {msg.name}',
         f'E-mail: {msg.email}',
@@ -57,16 +67,19 @@ def notify_owner(msg):
             'reply_to': msg.email,
             'subject': subject,
             'text': body,
+            'html': html,
         }
         return post_json(RESEND_URL, payload, settings.RESEND_API_KEY)
 
-    EmailMessage(
+    email = EmailMultiAlternatives(
         subject=subject,
         body=body,
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[settings.NOTIFY_EMAIL],
         reply_to=[msg.email],
-    ).send()
+    )
+    email.attach_alternative(html, 'text/html')
+    email.send()
     return True
 
 
