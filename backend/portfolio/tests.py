@@ -76,6 +76,21 @@ class ContactTests(TestCase):
         self.assertEqual(response['Access-Control-Allow-Origin'], 'http://localhost:5173')
 
 
+class AdminPanelTests(TestCase):
+    def test_dashboard_and_message_list_render(self):
+        from django.contrib.auth.models import User
+
+        self.client.force_login(User.objects.create_superuser('admin', 'a@example.com', 'x'))
+        msg = ContactMessage.objects.create(**{k: v for k, v in VALID.items()})
+        response = self.client.get('/admin/')
+        self.assertContains(response, 'Mensagens novas')
+        self.assertContains(response, 'Ana Souza')
+        self.assertContains(self.client.get('/admin/portfolio/contactmessage/'), 'badge--new')
+        self.client.get(f'/admin/portfolio/contactmessage/{msg.pk}/change/')
+        msg.refresh_from_db()
+        self.assertTrue(msg.read)  # abrir a mensagem marca como lida
+
+
 class PhoneTests(TestCase):
     def test_normalize(self):
         self.assertEqual(normalize_phone('(18) 99999-0000'), '5518999990000')

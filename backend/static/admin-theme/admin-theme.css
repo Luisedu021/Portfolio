@@ -634,7 +634,11 @@ fieldset.module h2 {
 }
 
 .module h2 a,
-.module caption a {
+.module caption a,
+.module caption a.section:link,
+.module caption a.section:visited,
+#nav-sidebar .module caption a.section:link,
+#nav-sidebar .module caption a.section:visited {
   color: var(--body-loud-color);
 }
 
@@ -776,6 +780,31 @@ ul.messagelist li {
 
 #nav-sidebar .current-model {
   background: var(--selected-bg);
+}
+
+/* Barra lateral: portfólio primeiro, usuários e grupos depois */
+#nav-sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;
+}
+
+#nav-sidebar .app-auth {
+  order: 2;
+}
+
+#nav-sidebar .module {
+  box-shadow: none;
+  margin-bottom: 12px;
+}
+
+#nav-sidebar #nav-filter {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 14px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  font-size: 13px;
 }
 
 .toggle-nav-sidebar {
