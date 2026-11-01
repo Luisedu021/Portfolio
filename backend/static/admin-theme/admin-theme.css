@@ -1,0 +1,519 @@
+/*
+ * Painel do Django na identidade do portfólio (tokens de src/index.css).
+ * O admin do Django é todo feito com variáveis CSS: trocar as variáveis já recolore tudo.
+ * Depois vêm alguns ajustes de forma (raios, botões em pílula, fontes) para ficar com cara do site.
+ * Modo claro e escuro seguem o botão de tema do próprio admin (data-theme) ou o sistema.
+ */
+
+/* ---------- Modo claro ---------- */
+:root,
+html[data-theme='light'] {
+  --primary: #003ea6;
+  --secondary: #07204b;
+  --accent: #cad3ff;
+  --primary-fg: #ffffff;
+
+  --body-fg: #121317;
+  --body-bg: #ffffff;
+  --body-quiet-color: #828282;
+  --body-medium-color: #344054;
+  --body-loud-color: #07204b;
+
+  --header-color: #cad3ff;
+  --header-branding-color: #ffffff;
+  --header-bg: #051a3f;
+  --header-link-color: #ffffff;
+
+  --breadcrumbs-fg: #98a2b3;
+  --breadcrumbs-link-fg: #003ea6;
+  --breadcrumbs-bg: #f2f2f2;
+
+  --link-fg: #003ea6;
+  --link-hover-color: #07204b;
+  --link-selected-fg: #003ea6;
+
+  --hairline-color: #e6e8eb;
+  --border-color: #d5d9e0;
+
+  --error-fg: #c0262d;
+  --message-success-bg: #e3f4ea;
+  --message-warning-bg: #fff6dc;
+  --message-error-bg: #fde8e8;
+
+  --darkened-bg: #f9faff;
+  --selected-bg: #e4ebf7;
+  --selected-row: #e4ebf7;
+
+  --button-fg: #ffffff;
+  --button-bg: #003ea6;
+  --button-hover-bg: #07204b;
+  --default-button-bg: #003ea6;
+  --default-button-hover-bg: #07204b;
+  --close-button-bg: #98a2b3;
+  --close-button-hover-bg: #344054;
+  --delete-button-bg: #c0262d;
+  --delete-button-hover-bg: #9b1c22;
+
+  --object-tools-fg: #ffffff;
+  --object-tools-bg: #07204b;
+  --object-tools-hover-bg: #003ea6;
+
+  --font-family-primary: Montserrat, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Variáveis próprias deste tema */
+  --theme-page: #f2f2f2;
+  --theme-card-shadow: 0 12px 40px rgba(5, 26, 64, 0.08);
+  --theme-brand-shadow: 0 8px 24px rgba(0, 62, 166, 0.3);
+  --theme-header-glow: #1c3f8f;
+  --theme-tag-bg: #1a1b20;
+  --theme-tag-fg: #cad3ff;
+}
+
+/* ---------- Modo escuro (o mesmo do site) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #2f6bf0;
+    --secondary: #e6edff;
+    --accent: #cad3ff;
+    --primary-fg: #ffffff;
+
+    --body-fg: #f2f4f7;
+    --body-bg: #1a1d26;
+    --body-quiet-color: #9aa3b2;
+    --body-medium-color: #e4e7ec;
+    --body-loud-color: #e6edff;
+
+    --header-color: #cad3ff;
+    --header-branding-color: #ffffff;
+    --header-bg: #0a1834;
+    --header-link-color: #ffffff;
+
+    --breadcrumbs-fg: #7d8696;
+    --breadcrumbs-link-fg: #8fb0ff;
+    --breadcrumbs-bg: #0f1117;
+
+    --link-fg: #8fb0ff;
+    --link-hover-color: #cad3ff;
+    --link-selected-fg: #8fb0ff;
+
+    --hairline-color: #2a2f3b;
+    --border-color: #353b49;
+
+    --error-fg: #ff7a7f;
+    --message-success-bg: #13301f;
+    --message-warning-bg: #3a2f12;
+    --message-error-bg: #3d1618;
+
+    --darkened-bg: #151821;
+    --selected-bg: #172544;
+    --selected-row: #172544;
+
+    --button-fg: #ffffff;
+    --button-bg: #2f6bf0;
+    --button-hover-bg: #2456d6;
+    --default-button-bg: #2f6bf0;
+    --default-button-hover-bg: #2456d6;
+    --close-button-bg: #4a5263;
+    --close-button-hover-bg: #7d8696;
+
+    --object-tools-fg: #ffffff;
+    --object-tools-bg: #2456d6;
+    --object-tools-hover-bg: #2f6bf0;
+
+    --theme-page: #0b0c10;
+    --theme-card-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    --theme-brand-shadow: 0 8px 24px rgba(47, 107, 240, 0.35);
+    --theme-tag-bg: #0b0c10;
+  }
+  html[data-theme='light'] {
+    color-scheme: light;
+  }
+}
+
+html[data-theme='dark'] {
+  --primary: #2f6bf0;
+  --secondary: #e6edff;
+  --accent: #cad3ff;
+  --primary-fg: #ffffff;
+
+  --body-fg: #f2f4f7;
+  --body-bg: #1a1d26;
+  --body-quiet-color: #9aa3b2;
+  --body-medium-color: #e4e7ec;
+  --body-loud-color: #e6edff;
+
+  --header-color: #cad3ff;
+  --header-branding-color: #ffffff;
+  --header-bg: #0a1834;
+  --header-link-color: #ffffff;
+
+  --breadcrumbs-fg: #7d8696;
+  --breadcrumbs-link-fg: #8fb0ff;
+  --breadcrumbs-bg: #0f1117;
+
+  --link-fg: #8fb0ff;
+  --link-hover-color: #cad3ff;
+  --link-selected-fg: #8fb0ff;
+
+  --hairline-color: #2a2f3b;
+  --border-color: #353b49;
+
+  --error-fg: #ff7a7f;
+  --message-success-bg: #13301f;
+  --message-warning-bg: #3a2f12;
+  --message-error-bg: #3d1618;
+
+  --darkened-bg: #151821;
+  --selected-bg: #172544;
+  --selected-row: #172544;
+
+  --button-fg: #ffffff;
+  --button-bg: #2f6bf0;
+  --button-hover-bg: #2456d6;
+  --default-button-bg: #2f6bf0;
+  --default-button-hover-bg: #2456d6;
+  --close-button-bg: #4a5263;
+  --close-button-hover-bg: #7d8696;
+
+  --object-tools-fg: #ffffff;
+  --object-tools-bg: #2456d6;
+  --object-tools-hover-bg: #2f6bf0;
+
+  --theme-page: #0b0c10;
+  --theme-card-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --theme-brand-shadow: 0 8px 24px rgba(47, 107, 240, 0.35);
+  --theme-tag-bg: #0b0c10;
+}
+
+/* ---------- Base ---------- */
+html,
+body {
+  background: var(--theme-page);
+}
+
+h1,
+h2,
+#site-name,
+.module caption,
+.module h2,
+#content h1 {
+  font-family: Poppins, var(--font-family-primary);
+}
+
+#content h1 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--body-loud-color);
+}
+
+/* ---------- Topo: azul-escuro do site com o brilho do hero ---------- */
+#header {
+  background:
+    radial-gradient(600px circle at 100% 0%, var(--theme-header-glow), transparent 70%),
+    var(--header-bg);
+  padding: 14px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#site-name .brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+#site-name .brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0;
+  box-shadow: var(--theme-brand-shadow);
+}
+
+#user-tools {
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#user-tools a {
+  border-bottom: none;
+  opacity: 0.85;
+}
+
+#user-tools a:hover,
+#user-tools a:focus {
+  color: var(--accent);
+  opacity: 1;
+  text-decoration: none;
+}
+
+div.breadcrumbs {
+  padding: 12px 40px;
+  border-bottom: 1px solid var(--hairline-color);
+  font-size: 13px;
+}
+
+/* ---------- Conteúdo em cartões, como no site ---------- */
+#content {
+  padding: 28px 40px;
+}
+
+.module,
+#changelist .changelist-form-container,
+#changelist-filter,
+.inline-group,
+fieldset.module {
+  background: var(--body-bg);
+  border-radius: 16px;
+  box-shadow: var(--theme-card-shadow);
+  border: 1px solid var(--hairline-color);
+  overflow: hidden;
+}
+
+/* Títulos dos blocos: faixa clara com texto azul, no lugar da barra azul padrão */
+.module h2,
+.module caption,
+.inline-group h2,
+fieldset.module h2 {
+  background: var(--darkened-bg);
+  color: var(--body-loud-color);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--hairline-color);
+}
+
+.module h2 a,
+.module caption a {
+  color: var(--body-loud-color);
+}
+
+#changelist-filter h2 {
+  background: var(--darkened-bg);
+  color: var(--body-loud-color);
+  border-bottom: 1px solid var(--hairline-color);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#changelist-filter h3 {
+  color: var(--body-medium-color);
+  font-weight: 600;
+}
+
+#changelist-filter li.selected a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Tabelas */
+thead th,
+tfoot td {
+  background: var(--darkened-bg);
+  color: var(--body-quiet-color);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+#changelist table tbody tr:hover {
+  background: var(--selected-bg);
+}
+
+td,
+th {
+  border-bottom-color: var(--hairline-color);
+}
+
+/* Barra de ações e busca */
+#changelist .actions,
+#toolbar {
+  background: var(--darkened-bg);
+  border: none;
+}
+
+#toolbar form input[type='text'],
+input[type='text'],
+input[type='password'],
+input[type='email'],
+input[type='url'],
+input[type='number'],
+input[type='tel'],
+textarea,
+select,
+.vTextField {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: var(--body-bg);
+  color: var(--body-fg);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+  border-color: var(--primary);
+}
+
+/* ---------- Botões em pílula, como os do site ---------- */
+.button,
+input[type='submit'],
+input[type='button'],
+.submit-row input,
+a.button,
+#changelist-search input[type='submit'] {
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-weight: 600;
+  font-family: var(--font-family-primary);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.button.default,
+input[type='submit'].default,
+.submit-row input.default {
+  box-shadow: var(--theme-brand-shadow);
+}
+
+.button:hover,
+input[type='submit']:hover {
+  transform: translateY(-1px);
+}
+
+.submit-row {
+  background: var(--darkened-bg);
+  border: 1px solid var(--hairline-color);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.submit-row a.deletelink {
+  border-radius: 999px;
+  height: auto;
+  padding: 9px 18px;
+}
+
+.object-tools a:link,
+.object-tools a:visited {
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Rótulos de ação "+ Adicionar" / "Modificar" da página inicial */
+.addlink,
+.changelink {
+  font-weight: 500;
+}
+
+/* Mensagens de sucesso/erro */
+ul.messagelist li {
+  border-radius: 12px;
+  margin: 0 0 10px;
+  font-weight: 500;
+}
+
+/* Barra lateral de navegação */
+#nav-sidebar {
+  background: var(--theme-page);
+  border-right: 1px solid var(--hairline-color);
+}
+
+#nav-sidebar .current-model {
+  background: var(--selected-bg);
+}
+
+.toggle-nav-sidebar {
+  background: var(--theme-page);
+  border-right-color: var(--hairline-color);
+}
+
+/* ---------- Tela de login ---------- */
+body.login {
+  background:
+    radial-gradient(900px circle at 96% 100%, #96c4ff, #c4ddfc 50%, #f1f5f9 100%);
+  min-height: 100vh;
+}
+
+html[data-theme='dark'] body.login {
+  background: radial-gradient(900px circle at 96% 100%, #1c3f8f, #111d3d 50%, #0b0d14 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme='light']) body.login {
+    background: radial-gradient(900px circle at 96% 100%, #1c3f8f, #111d3d 50%, #0b0d14 100%);
+  }
+}
+
+.login #container {
+  border-radius: 28px;
+  border: none;
+  box-shadow: 0 24px 64px rgba(5, 26, 64, 0.18);
+  overflow: hidden;
+  margin-top: 12vh;
+  max-width: 400px;
+}
+
+.login #header {
+  padding: 28px 32px;
+}
+
+.login #content {
+  padding: 28px 32px 32px;
+}
+
+.login .form-row {
+  padding: 6px 0;
+}
+
+.login .form-row label {
+  font-weight: 600;
+  color: var(--body-medium-color);
+  margin-bottom: 6px;
+}
+
+.login .form-row #id_username,
+.login .form-row #id_password {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border-radius: 12px;
+}
+
+.login .submit-row {
+  background: none;
+  border: none;
+  padding: 16px 0 0;
+}
+
+.login .submit-row input {
+  width: 100%;
+  padding: 13px 18px;
+  box-shadow: var(--theme-brand-shadow);
+}
+
+/* ---------- Celular ---------- */
+@media (max-width: 767px) {
+  #header,
+  div.breadcrumbs,
+  #content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
