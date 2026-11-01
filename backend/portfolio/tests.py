@@ -43,6 +43,12 @@ class ContactTests(TestCase):
         self.assertEqual(self.post({**VALID, 'email': 'nao-e-email'}).status_code, 400)
         self.assertFalse(ContactMessage.objects.exists())
 
+    def test_rejects_body_that_is_not_utf8(self):
+        body = json.dumps(VALID, ensure_ascii=False).encode('latin-1')  # como o Windows PowerShell 5.1 envia
+        response = self.client.post('/api/contact/', body, content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(ContactMessage.objects.exists())
+
     def test_honeypot_is_discarded(self):
         self.assertEqual(self.post({**VALID, 'website': 'spam.com'}).status_code, 201)
         self.assertFalse(ContactMessage.objects.exists())

@@ -75,7 +75,7 @@ def contact(request):
 
     try:
         payload = json.loads(request.body or b'{}')
-    except json.JSONDecodeError:
+    except ValueError:  # JSON inválido ou texto que não é UTF-8 (ex.: Windows PowerShell 5.1 manda Latin-1)
         return JsonResponse({'error': 'invalid_json'}, status=400)
 
     # Campo escondido no formulário: só robôs o preenchem.
