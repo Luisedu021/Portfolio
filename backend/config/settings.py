@@ -146,5 +146,9 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {'console': {'class': 'logging.StreamHandler'}},
-    'loggers': {'portfolio': {'handlers': ['console'], 'level': 'INFO'}},
+    'loggers': {
+        'portfolio': {'handlers': ['console'], 'level': 'INFO'},
+        # Com DEBUG=0 o Django não imprime os erros 500 (só manda e-mail aos ADMINS); assim eles aparecem nos Logs do Render.
+        'django.request': {'handlers': ['console'], 'level': 'ERROR', 'propagate': False},
+    },
 }
