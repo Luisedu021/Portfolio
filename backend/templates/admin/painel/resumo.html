@@ -1,0 +1,56 @@
+{% load static %}
+<section class="painel-stats">
+  <a class="stat-card stat-card--brand" href="{% url 'admin:portfolio_contactmessage_changelist' %}?read__exact=0">
+    <span class="stat-label">Mensagens novas</span>
+    <span class="stat-value">{{ unread }}</span>
+    <span class="stat-hint">{% if unread %}esperando resposta{% else %}tudo lido{% endif %}</span>
+  </a>
+  <a class="stat-card" href="{% url 'admin:portfolio_contactmessage_changelist' %}">
+    <span class="stat-label">Últimos 7 dias</span>
+    <span class="stat-value">{{ this_week }}</span>
+    <span class="stat-hint">{{ total_messages }} no total</span>
+  </a>
+  <a class="stat-card" href="{% url 'admin:portfolio_project_changelist' %}">
+    <span class="stat-label">Projetos no site</span>
+    <span class="stat-value">{{ published }}</span>
+    <span class="stat-hint">{{ total_projects }} cadastrado{{ total_projects|pluralize }}</span>
+  </a>
+  {% if failed %}
+  <a class="stat-card stat-card--alert" href="{% url 'admin:portfolio_contactmessage_changelist' %}?email_sent__exact=0">
+    <span class="stat-label">Avisos com erro</span>
+    <span class="stat-value">{{ failed }}</span>
+    <span class="stat-hint">e-mail não saiu, veja o erro</span>
+  </a>
+  {% endif %}
+</section>
+
+<section class="painel-card">
+  <header class="painel-card__head">
+    <h2>Últimas mensagens</h2>
+    <a href="{% url 'admin:portfolio_contactmessage_changelist' %}">Ver todas →</a>
+  </header>
+  {% if latest %}
+    <ul class="msg-list">
+      {% for msg in latest %}
+        <li>
+          <a class="msg-item{% if not msg.read %} is-unread{% endif %}" href="{% url 'admin:portfolio_contactmessage_change' msg.pk %}">
+            <span class="msg-avatar">{{ msg.name|slice:":1"|upper }}</span>
+            <span class="msg-body">
+              <span class="msg-top">
+                <strong>{{ msg.name }}</strong>
+                <span class="msg-tag">{{ msg.project }}</span>
+              </span>
+              <span class="msg-preview">{{ msg.message|truncatechars:110 }}</span>
+            </span>
+            <span class="msg-date">{{ msg.created_at|date:"d/m H:i" }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="painel-empty">
+      <img src="{% static 'admin-theme/logo.svg' %}" alt="" width="25" height="34">
+      <p>Nenhuma mensagem ainda. Quando alguém usar o formulário do site, ela aparece aqui.</p>
+    </div>
+  {% endif %}
+</section>

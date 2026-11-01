@@ -1,0 +1,23 @@
+{% extends "admin/index.html" %}
+{% load painel %}
+{% comment %} Página inicial do painel: resumo e últimas mensagens antes da lista de seções padrão do Django. {% endcomment %}
+
+{% block coltype %}colM{% endblock %}
+{% block sidebar %}{% endblock %}
+
+{% block content_title %}
+  <div class="painel-hello">
+    <h1>Olá, {{ user.first_name|default:user.get_username }}</h1>
+    <p>Mensagens do formulário e projetos do portfólio, num lugar só.</p>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    {% painel_resumo %}
+    <h2 class="painel-section-title">Seções</h2>
+    <div class="app-list">
+      {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    </div>
+  </div>
+{% endblock %}

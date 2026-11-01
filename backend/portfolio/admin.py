@@ -40,17 +40,67 @@ class ProjectAdmin(admin.ModelAdmin):
         return thumbnail(obj.preview or obj.screen_mobile, height=240)
 
 
+def badge(text, kind):
+    """Etiqueta colorida (estilos .badge em static/admin-theme/admin-theme.css)."""
+    return format_html('<span class="badge badge--{}">{}</span>', kind, text)
+
+
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ('created_at', 'name', 'project', 'email', 'phone', 'read', 'email_sent', 'whatsapp_sent')
-    list_filter = ('read', 'email_sent', 'whatsapp_sent')
+    list_display = ('status', 'name', 'project', 'preview', 'contact', 'email_status', 'created_at', 'read')
+    list_display_links = ('name',)
+    list_filter = ('read', 'email_sent', 'whatsapp_sent', 'created_at')
     list_editable = ('read',)
+    list_per_page = 30
+    date_hierarchy = 'created_at'
     search_fields = ('name', 'email', 'project', 'message')
     readonly_fields = (
         'name', 'email', 'phone', 'location', 'project', 'message', 'language', 'created_at',
         'email_sent', 'whatsapp_sent', 'notification_error',
     )
+    fieldsets = (
+        ('Quem escreveu', {'fields': ('name', 'email', 'phone', 'location', 'language', 'created_at')}),
+        ('Mensagem', {'fields': ('project', 'message', 'read')}),
+        ('Avisos', {'fields': ('email_sent', 'whatsapp_sent', 'notification_error'), 'classes': ('collapse',)}),
+    )
+    actions = ('mark_read', 'mark_unread')
 
     def has_add_permission(self, request):
         # Mensagens só chegam pelo formulário do site.
         return False
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Abrir a mensagem já marca como lida.
+        self.get_queryset(request).filter(pk=object_id, read=False).update(read=True)
+        return super().change_view(request, object_id, form_url, extra_context)
+
+    @admin.display(description='', ordering='read')
+    def status(self, obj):
+        return badge('Nova', 'new') if not obj.read else badge('Lida', 'muted')
+
+    @admin.display(description='mensagem')
+    def preview(self, obj):
+        return obj.message if len(obj.message) <= 70 else f'{obj.message[:70]}…'
+
+    @admin.display(description='contato')
+    def contact(self, obj):
+        return format_html(
+            '<a href="mailto:{}">{}</a>{}', obj.email, obj.email,
+            format_html('<br><span style="color:var(--body-quiet-color)">{}</span>', obj.phone) if obj.phone else '',
+        )
+
+    @admin.display(description='aviso', ordering='email_sent')
+    def email_status(self, obj):
+        if obj.email_sent:
+            return badge('E-mail enviado', 'ok')
+        if obj.notification_error:
+            return badge('Erro', 'error')
+        return badge('Sem aviso', 'muted')
+
+    @admin.action(description='Marcar como lidas')
+    def mark_read(self, request, queryset):
+        queryset.update(read=True)
+
+    @admin.action(description='Marcar como não lidas')
+    def mark_unread(self, request, queryset):
+        queryset.update(read=False)

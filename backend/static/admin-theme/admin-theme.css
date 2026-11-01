@@ -218,24 +218,362 @@ h2,
 #site-name .brand-link {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  text-decoration: none;
+}
+
+#site-name .brand-logo {
+  width: 25px;
+  height: 34px;
+  filter: drop-shadow(0 4px 14px rgba(150, 196, 255, 0.35));
+}
+
+#site-name .brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  padding-left: 14px;
+  border-left: 1px solid rgba(202, 211, 255, 0.25);
+}
+
+#site-name .brand-name {
+  font-family: Poppins, var(--font-family-primary);
   font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+#site-name .brand-sub {
+  font-family: var(--font-family-primary);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #96c4ff;
+}
+
+/* ---------- Página inicial: saudação, números e últimas mensagens ---------- */
+/* O dashboard.css do Django prende a página inicial em 600px */
+.dashboard #content {
+  width: auto;
+  max-width: 1120px;
+}
+
+.dashboard #content-main {
+  float: none;
+  width: 100%;
+}
+
+/* "Encerrar sessão" é um botão no Django 5: mesmo estilo dos outros links do topo */
+#user-tools #logout-form button {
+  font: inherit;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--header-link-color);
+  border-bottom: none;
+  opacity: 0.85;
+}
+
+#user-tools #logout-form button:hover {
+  color: var(--accent);
+  opacity: 1;
+  text-decoration: none;
+}
+
+.painel-hello h1 {
+  font-size: 30px;
+  margin: 0 0 4px;
+}
+
+.painel-hello p {
+  margin: 0 0 24px;
+  color: var(--body-quiet-color);
+  font-size: 15px;
+}
+
+.painel-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+a.stat-card,
+a.stat-card:link,
+a.stat-card:visited {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: var(--body-bg);
+  border: 1px solid var(--hairline-color);
+  box-shadow: var(--theme-card-shadow);
+  color: var(--body-fg);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+a.stat-card:hover {
+  transform: translateY(-2px);
+  color: var(--body-fg);
+}
+
+a.stat-card--brand,
+a.stat-card--brand:link,
+a.stat-card--brand:visited {
+  background:
+    radial-gradient(260px circle at 100% 100%, #2f6bf0, transparent 70%),
+    #003ea6;
+  border-color: transparent;
+  box-shadow: var(--theme-brand-shadow);
+  color: #ffffff;
+}
+
+a.stat-card--brand:hover {
+  color: #ffffff;
+}
+
+a.stat-card--alert {
+  border-color: var(--error-fg);
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.stat-value {
+  font-family: Poppins, var(--font-family-primary);
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.stat-card--alert .stat-value {
+  color: var(--error-fg);
+}
+
+.stat-hint {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.painel-card {
+  background: var(--body-bg);
+  border: 1px solid var(--hairline-color);
+  border-radius: 20px;
+  box-shadow: var(--theme-card-shadow);
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.painel-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--hairline-color);
+}
+
+.painel-card__head h2 {
+  margin: 0;
   font-size: 18px;
+  font-weight: 600;
+  color: var(--body-loud-color);
+  background: none;
+  padding: 0;
+  text-transform: none;
   letter-spacing: -0.01em;
 }
 
-#site-name .brand-mark {
-  display: inline-grid;
+.painel-card__head a {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.msg-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.msg-list li {
+  list-style: none;
+  padding: 0;
+  border-bottom: 1px solid var(--hairline-color);
+}
+
+.msg-list li:last-child {
+  border-bottom: none;
+}
+
+a.msg-item,
+a.msg-item:link,
+a.msg-item:visited {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+  color: var(--body-fg);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+a.msg-item:hover {
+  background: var(--selected-bg);
+  color: var(--body-fg);
+}
+
+.msg-avatar {
+  flex: none;
+  display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--selected-bg);
+  color: var(--primary);
+  font-family: Poppins, var(--font-family-primary);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.is-unread .msg-avatar {
   background: var(--primary);
   color: #ffffff;
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0;
-  box-shadow: var(--theme-brand-shadow);
+}
+
+.msg-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.msg-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.msg-top strong {
+  font-weight: 600;
+  color: var(--body-loud-color);
+}
+
+.is-unread .msg-top strong::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 8px;
+  border-radius: 999px;
+  background: var(--primary);
+  vertical-align: middle;
+}
+
+.msg-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--theme-tag-bg);
+  color: var(--theme-tag-fg);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.msg-preview {
+  color: var(--body-quiet-color);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.msg-date {
+  flex: none;
+  font-size: 12px;
+  color: var(--body-quiet-color);
+}
+
+.painel-empty {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 22px;
+  color: var(--body-quiet-color);
+}
+
+.painel-empty p {
+  margin: 0;
+}
+
+.painel-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--body-quiet-color);
+  margin: 0 0 12px;
+}
+
+/* Lista de seções da página inicial: cartões lado a lado */
+.dashboard #content-main .app-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.dashboard #content-main .app-list .module {
+  margin: 0;
+}
+
+/* Portfólio primeiro, usuários e grupos depois */
+.dashboard #content-main .app-list .app-auth {
+  order: 2;
+}
+
+.dashboard .module table {
+  width: 100%;
+}
+
+/* Etiquetas de status nas listas (admin.py) */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge--new {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.badge--ok {
+  background: var(--message-success-bg);
+  color: #1f9d55;
+}
+
+.badge--muted {
+  background: var(--darkened-bg);
+  color: var(--body-quiet-color);
+}
+
+.badge--error {
+  background: var(--message-error-bg);
+  color: var(--error-fg);
 }
 
 #user-tools {

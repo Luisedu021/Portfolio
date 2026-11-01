@@ -9,6 +9,7 @@
 
 {% block extrastyle %}
   {{ block.super }}
+  <link rel="icon" type="image/svg+xml" href="{% static 'admin-theme/logo.svg' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
@@ -18,8 +19,11 @@
 {% block branding %}
   <div id="site-name">
     <a href="{% url 'admin:index' %}" class="brand-link">
-      <span class="brand-mark">LL</span>
-      <span class="brand-text">{{ site_header|default:_('Django administration') }}</span>
+      <img class="brand-logo" src="{% static 'admin-theme/logo.svg' %}" alt="" width="25" height="34">
+      <span class="brand-text">
+        <span class="brand-name">Luís Lopes</span>
+        <span class="brand-sub">{{ site_header|default:_('Django administration') }}</span>
+      </span>
     </a>
   </div>
   {% if user.is_anonymous %}
