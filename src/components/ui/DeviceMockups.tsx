@@ -10,7 +10,8 @@ import { fadeUp } from '../../lib/motion'
  * As posições da tela são porcentagens da moldura, medidas no Figma.
  */
 
-export type DeviceScreens = { desktop?: string; tablet?: string; mobile?: string }
+/** `mobileAlt`: segunda tela de celular, para projetos só de app (dois celulares lado a lado). */
+export type DeviceScreens = { desktop?: string; tablet?: string; mobile?: string; mobileAlt?: string }
 
 type DeviceProps = { src: string; alt: string; className?: string }
 
@@ -62,11 +63,25 @@ const shadow = 'drop-shadow-[0_24px_32px_rgb(0_0_0/0.35)]'
 
 /**
  * Composição dos aparelhos que o projeto tiver:
- * notebook + tablet + celular, tablet + celular (app) ou só o notebook (software).
+ * notebook + tablet + celular, tablet + celular, dois celulares (app) ou só o notebook (software).
  * Os aparelhos entram um de cada vez (variantes `fadeUp` do container pai).
  */
 export function DeviceShowcase({ screens, alt, className }: DeviceShowcaseProps) {
-  const { desktop, tablet, mobile } = screens
+  const { desktop, tablet, mobile, mobileAlt } = screens
+
+  // Dois celulares: o primeiro mais alto, o segundo um pouco abaixo e à frente.
+  if (mobile && mobileAlt && !desktop && !tablet) {
+    return (
+      <div className={cn('relative aspect-[5/4]', className)}>
+        <motion.div variants={fadeUp} className={cn('absolute top-0 left-[13%] w-[37%]', shadow)}>
+          <Phone src={mobile} alt={alt} />
+        </motion.div>
+        <motion.div variants={fadeUp} className={cn('absolute right-[11%] bottom-0 w-[37%]', shadow)}>
+          <Phone src={mobileAlt} alt={alt} />
+        </motion.div>
+      </div>
+    )
+  }
 
   if (desktop && !tablet && !mobile) {
     return (

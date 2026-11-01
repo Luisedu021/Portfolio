@@ -14,15 +14,16 @@ import garanhaniDesktop from '../assets/projects/garanhani-desktop.jpg'
 import garanhaniMobile from '../assets/projects/garanhani-mobile.jpg'
 import garanhaniPreview from '../assets/projects/garanhani-preview.jpg'
 import garanhaniTablet from '../assets/projects/garanhani-tablet.jpg'
-import ironCapiMobile from '../assets/projects/ironcapi-mobile.jpg'
-import ironCapiPreview from '../assets/projects/ironcapi-preview.jpg'
-import ironCapiTablet from '../assets/projects/ironcapi-tablet.jpg'
+import ironCapiHome from '../assets/projects/ironcapi-mobile-home.jpg'
+import ironCapiPhoto from '../assets/projects/ironcapi-mobile-photo.jpg'
+import ironCapiPreview from '../assets/projects/ironcapi-cover.jpg'
 import megaAtasDesktop from '../assets/projects/megaatas-desktop.jpg'
 import megaAtasMobile from '../assets/projects/megaatas-mobile.jpg'
 import megaAtasPreview from '../assets/projects/megaatas-preview.jpg'
 import megaAtasTablet from '../assets/projects/megaatas-tablet.jpg'
 import wellnovaDesktop from '../assets/projects/wellnova-desktop.jpg'
 import wellnovaMobile from '../assets/projects/wellnova-mobile.jpg'
+import wellnovaAppPreview from '../assets/projects/wellnova-app-cover.jpg'
 import wellnovaPreview from '../assets/projects/wellnova-preview.jpg'
 import wellnovaTablet from '../assets/projects/wellnova-tablet.jpg'
 import type { DeviceScreens } from '../components/ui/DeviceMockups'
@@ -119,7 +120,7 @@ export const projects: Project[] = [
     category: 'uiux',
     title: 'Iron Capi',
     tags: ['UI/UX', 'App'],
-    screens: { tablet: ironCapiTablet, mobile: ironCapiMobile },
+    screens: { mobile: ironCapiHome, mobileAlt: ironCapiPhoto },
     preview: ironCapiPreview,
     href: 'https://luisedu021.github.io/Iron-Capi/',
     text: {
@@ -158,7 +159,7 @@ export const projects: Project[] = [
     tags: ['Software', 'Dashboard'],
     // Mesmas imagens do hotsite: as telas internas do sistema não são públicas.
     screens: { desktop: wellnovaDesktop, tablet: wellnovaTablet, mobile: wellnovaMobile },
-    preview: wellnovaPreview,
+    preview: wellnovaAppPreview,
     text: {
       pt: {
         summary: 'Plataforma de IA da Wellnova para integridade de poços de óleo e gás. Atuei no redesign de um módulo específico do sistema.',
