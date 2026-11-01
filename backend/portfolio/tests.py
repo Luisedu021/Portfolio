@@ -22,7 +22,21 @@ class ContactTests(TestCase):
         self.assertTrue(msg.email_sent)
         self.assertFalse(msg.whatsapp_sent)  # sem token configurado
         self.assertEqual(mail.outbox[0].to, ['dono@example.com'])
+        self.assertEqual(mail.outbox[0].reply_to, ['ana@example.com'])
         self.assertIn('18 99999-0000', mail.outbox[0].body)
+
+    @override_settings(RESEND_API_KEY='re_teste', DEFAULT_FROM_EMAIL='Portfólio <contato@example.com>')
+    def test_emails_through_resend_api(self):
+        with mock.patch('portfolio.notifications.urllib.request.urlopen') as urlopen:
+            self.assertEqual(self.post(VALID).status_code, 201)
+        request = urlopen.call_args.args[0]
+        payload = json.loads(request.data)
+        self.assertEqual(request.full_url, 'https://api.resend.com/emails')
+        self.assertEqual(request.get_header('Authorization'), 'Bearer re_teste')
+        self.assertEqual(payload['to'], ['dono@example.com'])
+        self.assertEqual(payload['reply_to'], 'ana@example.com')
+        self.assertTrue(ContactMessage.objects.get().email_sent)
+        self.assertEqual(mail.outbox, [])
 
     def test_rejects_missing_fields_and_bad_email(self):
         self.assertEqual(self.post({**VALID, 'message': ''}).status_code, 400)
@@ -34,7 +48,7 @@ class ContactTests(TestCase):
         self.assertFalse(ContactMessage.objects.exists())
 
     def test_email_failure_keeps_message(self):
-        with mock.patch('portfolio.notifications.send_mail', side_effect=OSError('smtp fora')):
+        with mock.patch('portfolio.notifications.EmailMessage.send', side_effect=OSError('smtp fora')):
             self.assertEqual(self.post(VALID).status_code, 201)
         msg = ContactMessage.objects.get()
         self.assertFalse(msg.email_sent)

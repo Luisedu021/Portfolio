@@ -7,17 +7,39 @@ import urllib.error
 import urllib.request
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 logger = logging.getLogger('portfolio')
 
 GRAPH_URL = 'https://graph.facebook.com/v21.0/{phone_id}/messages'
+RESEND_URL = 'https://api.resend.com/emails'
+
+
+def post_json(url, payload, token):
+    """POST com JSON e Bearer token. Erros HTTP viram RuntimeError com a resposta da API (aparece no painel)."""
+    request = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode(),
+        # User-Agent próprio: o padrão do urllib é barrado pelo Cloudflare na frente da API do Resend.
+        headers={'Authorization': f'Bearer {token}', 'Content-Type': 'application/json', 'User-Agent': 'portfolio-api'},
+        method='POST',
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=10):
+            return True
+    except urllib.error.HTTPError as error:
+        raise RuntimeError(f'{error.code}: {error.read().decode(errors="replace")[:500]}') from error
 
 
 def notify_owner(msg):
-    """E-mail para NOTIFY_EMAIL com os dados da mensagem. Retorna True se enviou."""
+    """
+    E-mail para NOTIFY_EMAIL com os dados da mensagem; "Responder" vai direto para quem escreveu.
+    Com RESEND_API_KEY envia pela API HTTP do Resend (o Render free bloqueia SMTP);
+    sem ela, usa o EMAIL_BACKEND do Django (terminal localmente, ou SMTP). Retorna True se enviou.
+    """
     if not settings.NOTIFY_EMAIL:
         return False
+    subject = f'Novo contato pelo portfólio: {msg.project}'
     body = '\n'.join([
         f'Nome: {msg.name}',
         f'E-mail: {msg.email}',
@@ -27,12 +49,24 @@ def notify_owner(msg):
         '',
         msg.message,
     ])
-    send_mail(
-        subject=f'Novo contato pelo portfólio: {msg.project}',
-        message=body,
+
+    if settings.RESEND_API_KEY:
+        payload = {
+            'from': settings.DEFAULT_FROM_EMAIL,
+            'to': [settings.NOTIFY_EMAIL],
+            'reply_to': msg.email,
+            'subject': subject,
+            'text': body,
+        }
+        return post_json(RESEND_URL, payload, settings.RESEND_API_KEY)
+
+    EmailMessage(
+        subject=subject,
+        body=body,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[settings.NOTIFY_EMAIL],
-    )
+        to=[settings.NOTIFY_EMAIL],
+        reply_to=[msg.email],
+    ).send()
     return True
 
 
@@ -60,17 +94,7 @@ def confirm_on_whatsapp(msg):
             'components': [{'type': 'body', 'parameters': [{'type': 'text', 'text': msg.name.split()[0]}]}],
         },
     }
-    request = urllib.request.Request(
-        GRAPH_URL.format(phone_id=settings.WHATSAPP_PHONE_NUMBER_ID),
-        data=json.dumps(payload).encode(),
-        headers={'Authorization': f'Bearer {settings.WHATSAPP_TOKEN}', 'Content-Type': 'application/json'},
-        method='POST',
-    )
-    try:
-        with urllib.request.urlopen(request, timeout=10):
-            return True
-    except urllib.error.HTTPError as error:
-        raise RuntimeError(f'WhatsApp {error.code}: {error.read().decode(errors="replace")[:500]}') from error
+    return post_json(GRAPH_URL.format(phone_id=settings.WHATSAPP_PHONE_NUMBER_ID), payload, settings.WHATSAPP_TOKEN)
 
 
 def notify(msg):

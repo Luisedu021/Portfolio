@@ -26,8 +26,9 @@ Painel: http://localhost:8010/admin/ (login criado no `createsuperuser`).
 
 ## Notificações
 
-- **E-mail para você**: preencha `NOTIFY_EMAIL` e o SMTP no `.env` (ex.: Resend: `EMAIL_HOST=smtp.resend.com`,
-  `EMAIL_HOST_USER=resend`, `EMAIL_HOST_PASSWORD=<API key>`). Sem SMTP, o e-mail aparece no terminal.
+- **E-mail para você**: preencha `NOTIFY_EMAIL`, `RESEND_API_KEY` e `DEFAULT_FROM_EMAIL` (de um domínio verificado
+  no Resend). O envio é pela API HTTP do Resend, porque o Render free bloqueia as portas SMTP. O "Responder" do
+  e-mail vai direto para quem escreveu. Sem a chave, o e-mail aparece no terminal (ou sai por SMTP, com `EMAIL_HOST`).
 - **WhatsApp para quem enviou**: crie o app na Meta (WhatsApp Cloud API), aprove um modelo com uma variável
   (o nome da pessoa) e preencha `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` e `WHATSAPP_TEMPLATE`.
   Sem token, essa etapa é pulada.
@@ -47,13 +48,14 @@ O DNS fica na Cloudflare (domínio `.br` comprado no Registro.br, com os servido
    - `DJANGO_ALLOWED_HOSTS`: `api.seudominio.dev.br`
    - `CORS_ALLOWED_ORIGINS`: `https://seudominio.dev.br,https://www.seudominio.dev.br`
    - `R2_*`: Account ID, bucket, chaves do token e o domínio público
-   - `NOTIFY_EMAIL` e, quando tiver, o SMTP e o WhatsApp (mesmas variáveis do `.env`)
+   - `NOTIFY_EMAIL`, `RESEND_API_KEY`, `DEFAULT_FROM_EMAIL` e, quando tiver, o WhatsApp
+   - `DJANGO_SUPERUSER_USERNAME`, `DJANGO_SUPERUSER_EMAIL`, `DJANGO_SUPERUSER_PASSWORD`: o login do painel
 
    Depois, em Settings → Custom Domains, adicione `api.seudominio.dev.br` e crie o CNAME que o Render indicar
-   na Cloudflare. O build já roda `collectstatic` e `migrate`. Para criar o login do painel, abra o Shell do
-   serviço no Render e rode `python manage.py createsuperuser` (e `seed_projects`, se o banco estiver vazio).
-4. **Site (Cloudflare Pages)**: Workers & Pages → Create → Pages → conectar o GitHub. Build `npm run build`,
-   saída `dist`, variável `VITE_API_URL=https://api.seudominio.dev.br`. Em Custom domains, adicione o domínio.
+   na Cloudflare. O build roda `collectstatic`, `migrate` e cria o login do painel (o plano free não tem Shell).
+   Para popular o banco com os projetos, rode `seed_projects` localmente com `DATABASE_URL` (e `R2_*`) de produção.
+4. **Site (Cloudflare Worker)**: em Settings → Build → Variables, adicione `VITE_API_URL=https://api.seudominio.dev.br`
+   e faça um novo deploy (a variável entra no build do Vite).
 
 No plano free o Render desliga a API depois de ~15 min sem acesso; a primeira visita seguinte espera uns 30–50 s.
 O site não quebra nesse meio tempo: sem resposta da API ele mostra os projetos de `src/data/content.ts`.

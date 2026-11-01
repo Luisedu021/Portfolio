@@ -5,8 +5,15 @@ services:
     name: portfolio-api
     runtime: python
     plan: free
+    # Região mais próxima do Brasil no Render; o banco no Neon deve ficar em AWS US East (N. Virginia).
+    region: virginia
     rootDir: backend
-    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    # O plano free não tem Shell: o login do painel é criado aqui a partir de DJANGO_SUPERUSER_* (se já existir, segue).
+    buildCommand: >-
+      pip install -r requirements.txt &&
+      python manage.py collectstatic --noinput &&
+      python manage.py migrate &&
+      if [ -n "$DJANGO_SUPERUSER_USERNAME" ]; then python manage.py createsuperuser --noinput || true; fi
     startCommand: gunicorn config.wsgi
     healthCheckPath: /api/projects/
     envVars:
@@ -35,5 +42,19 @@ services:
         sync: false
       - key: R2_PUBLIC_DOMAIN
         sync: false
+      # E-mail que recebe os contatos do formulário
       - key: NOTIFY_EMAIL
+        sync: false
+      # API key do Resend (re_...). O Render free bloqueia SMTP, então o e-mail sai pela API HTTP deles.
+      - key: RESEND_API_KEY
+        sync: false
+      # Remetente num domínio verificado no Resend, ex.: Portfólio <contato@seudominio.dev.br>
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+      # Login do painel /admin/, criado no build
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
         sync: false

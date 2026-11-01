@@ -71,6 +71,9 @@ DATABASES = {
         os.getenv('DATABASE_URL') or f'sqlite:///{BASE_DIR / "db.sqlite3"}', conn_max_age=600
     ),
 }
+# URL "pooled" do Neon (host com -pooler): o PgBouncer em modo transação não suporta server-side cursors.
+if '-pooler.' in os.getenv('DATABASE_URL', ''):
+    DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -118,9 +121,11 @@ if os.getenv('R2_BUCKET'):
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# E-mail: sem EMAIL_HOST, as mensagens só aparecem no terminal.
+# E-mail: com RESEND_API_KEY, envio pela API do Resend (produção: o Render free bloqueia SMTP).
+# Sem ela: SMTP se houver EMAIL_HOST, senão as mensagens só aparecem no terminal.
 NOTIFY_EMAIL = os.getenv('NOTIFY_EMAIL', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
 if os.getenv('EMAIL_HOST'):
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = os.getenv('EMAIL_HOST')
