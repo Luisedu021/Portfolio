@@ -1,72 +1,88 @@
 <!doctype html>
 {% comment %}
-  E-mail de aviso de um novo contato. Clientes de e-mail ignoram CSS externo e boa parte do moderno:
-  por isso tabelas e estilos inline. O Django escapa sozinho tudo que veio do formulário.
+  E-mail de aviso de um novo contato, na identidade do portfólio (tokens de src/index.css):
+  Poppins nos títulos e Montserrat no texto, azul brand #003ea6, títulos #07204b, fundo #f2f2f2,
+  cartão com raio de 28px, tags escuras com texto #cad3ff, botões em pílula e o degradê azul do hero.
+  Clientes de e-mail ignoram CSS externo e boa parte do moderno: por isso tabelas e estilos inline.
+  O Gmail não carrega fontes externas e cai no fallback (Arial); Apple Mail e iOS mostram Poppins/Montserrat.
+  O Django escapa sozinho tudo que veio do formulário.
 {% endcomment %}
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
   <title>{{ subject }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
-<body style="margin:0;padding:0;background:#f2f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1a1f2b;">
+<body style="margin:0;padding:0;background:#f2f2f2;font-family:Montserrat,Arial,Helvetica,sans-serif;color:#121317;">
   <div style="display:none;max-height:0;overflow:hidden;">{{ msg.name }} — {{ msg.message|truncatechars:90 }}</div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f4f8;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f2f2f2" style="background:#f2f2f2;">
     <tr>
       <td align="center" style="padding:32px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e3e7ef;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="max-width:600px;background:#ffffff;border-radius:28px;overflow:hidden;box-shadow:0 24px 64px rgba(5,26,64,0.1);">
 
+          <!-- Topo com o degradê do hero -->
           <tr>
-            <td style="background:#07204b;padding:24px 28px;">
-              <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#9fb6e0;">Novo contato pelo portfólio</div>
-              <div style="font-size:22px;font-weight:700;color:#ffffff;margin-top:6px;">{{ msg.project }}</div>
+            <td bgcolor="#c4ddfc" style="background:#c4ddfc;background-image:linear-gradient(135deg,#f1f5f9 0%,#c4ddfc 55%,#96c4ff 100%);padding:36px 36px 32px;">
+              <div style="font-family:Montserrat,Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#003ea6;">luislopes.dev.br</div>
+              <div style="font-family:Poppins,Arial,sans-serif;font-size:36px;line-height:1;font-weight:700;letter-spacing:-1.5px;text-transform:uppercase;color:#07204b;margin-top:14px;">Novo contato</div>
+              <div style="margin-top:18px;">
+                <span style="display:inline-block;background:#1a1b20;color:#cad3ff;font-family:Montserrat,Arial,sans-serif;font-size:13px;font-weight:500;padding:7px 14px;border-radius:999px;">{{ msg.project }}</span>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Quem enviou -->
+          <tr>
+            <td style="padding:32px 36px 4px;">
+              <div style="font-family:Poppins,Arial,sans-serif;font-size:24px;line-height:1.2;font-weight:600;letter-spacing:-0.3px;color:#07204b;">{{ msg.name }}</div>
+              <div style="font-size:13px;color:#98a2b3;margin-top:6px;">{{ msg.created_at|date:"d/m/Y \à\s H:i" }}{% if msg.language == 'en' %} · veio do site em inglês{% endif %}</div>
             </td>
           </tr>
 
           <tr>
-            <td style="padding:28px 28px 8px;">
-              <div style="font-size:18px;font-weight:600;">{{ msg.name }}</div>
-              <div style="font-size:14px;color:#5b6475;margin-top:2px;">{{ msg.created_at|date:"d/m/Y \à\s H:i" }}{% if msg.language == 'en' %} · site em inglês{% endif %}</div>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:16px 28px;">
+            <td style="padding:20px 36px 8px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;">
                 <tr>
-                  <td style="padding:6px 0;color:#5b6475;width:110px;">E-mail</td>
-                  <td style="padding:6px 0;"><a href="mailto:{{ msg.email }}" style="color:#003ea6;text-decoration:none;">{{ msg.email }}</a></td>
+                  <td style="padding:10px 0;border-bottom:1px solid #e6e8eb;color:#828282;width:120px;">E-mail</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #e6e8eb;font-weight:500;"><a href="mailto:{{ msg.email }}" style="color:#003ea6;text-decoration:none;">{{ msg.email }}</a></td>
                 </tr>
                 <tr>
-                  <td style="padding:6px 0;color:#5b6475;">WhatsApp</td>
-                  <td style="padding:6px 0;">{% if whatsapp_link %}<a href="{{ whatsapp_link }}" style="color:#003ea6;text-decoration:none;">{{ msg.phone }}</a>{% else %}{{ msg.phone|default:"—" }}{% endif %}</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #e6e8eb;color:#828282;">WhatsApp</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #e6e8eb;font-weight:500;color:#344054;">{% if whatsapp_link %}<a href="{{ whatsapp_link }}" style="color:#003ea6;text-decoration:none;">{{ msg.phone }}</a>{% else %}{{ msg.phone|default:"—" }}{% endif %}</td>
                 </tr>
                 <tr>
-                  <td style="padding:6px 0;color:#5b6475;">Localização</td>
-                  <td style="padding:6px 0;">{{ msg.location|default:"—" }}</td>
+                  <td style="padding:10px 0;color:#828282;">Localização</td>
+                  <td style="padding:10px 0;font-weight:500;color:#344054;">{{ msg.location|default:"—" }}</td>
                 </tr>
               </table>
             </td>
           </tr>
 
+          <!-- Mensagem -->
           <tr>
-            <td style="padding:8px 28px 24px;">
-              <div style="background:#e4ebf7;border-left:4px solid #003ea6;border-radius:6px;padding:16px 18px;font-size:15px;line-height:1.6;">{{ msg.message|linebreaksbr }}</div>
+            <td style="padding:20px 36px 8px;">
+              <div style="font-family:Montserrat,Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#98a2b3;margin-bottom:10px;">Mensagem</div>
+              <div style="background:#e4ebf7;border-radius:12px;padding:20px 22px;font-size:15px;line-height:1.65;color:#121317;">{{ msg.message|linebreaksbr }}</div>
             </td>
           </tr>
 
+          <!-- Ações -->
           <tr>
-            <td style="padding:0 28px 28px;">
-              <a href="mailto:{{ msg.email }}?subject={{ reply_subject|urlencode }}" style="display:inline-block;background:#003ea6;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 20px;border-radius:8px;margin:0 8px 8px 0;">Responder por e-mail</a>
-              {% if whatsapp_link %}<a href="{{ whatsapp_link }}" style="display:inline-block;background:#1f9d55;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 20px;border-radius:8px;margin:0 8px 8px 0;">Chamar no WhatsApp</a>{% endif %}
-              {% if panel_link %}<a href="{{ panel_link }}" style="display:inline-block;background:#ffffff;color:#003ea6;text-decoration:none;font-weight:600;font-size:14px;padding:11px 19px;border-radius:8px;border:1px solid #c5d3ec;margin:0 8px 8px 0;">Ver no painel</a>{% endif %}
+            <td style="padding:24px 36px 36px;">
+              <a href="mailto:{{ msg.email }}?subject={{ reply_subject|urlencode }}" style="display:inline-block;background:#003ea6;color:#ffffff;text-decoration:none;font-family:Montserrat,Arial,sans-serif;font-weight:600;font-size:14px;padding:13px 24px;border-radius:999px;box-shadow:0 8px 24px rgba(0,62,166,0.35);margin:0 8px 10px 0;">Responder por e-mail</a>
+              {% if whatsapp_link %}<a href="{{ whatsapp_link }}" style="display:inline-block;background:#07204b;color:#ffffff;text-decoration:none;font-family:Montserrat,Arial,sans-serif;font-weight:600;font-size:14px;padding:13px 24px;border-radius:999px;margin:0 8px 10px 0;">Chamar no WhatsApp</a>{% endif %}
+              {% if panel_link %}<a href="{{ panel_link }}" style="display:inline-block;background:#ffffff;color:#003ea6;text-decoration:none;font-family:Montserrat,Arial,sans-serif;font-weight:600;font-size:14px;padding:12px 23px;border-radius:999px;border:1px solid #003ea6;margin:0 8px 10px 0;">Ver no painel</a>{% endif %}
             </td>
           </tr>
 
+          <!-- Rodapé escuro, como o fundo inverse do site -->
           <tr>
-            <td style="padding:16px 28px;border-top:1px solid #e3e7ef;font-size:12px;color:#8a92a3;">
-              Enviado pelo formulário de luislopes.dev.br. Responder a este e-mail também vai direto para {{ msg.name }}.
+            <td bgcolor="#051a3f" style="background:#051a3f;padding:20px 36px;font-size:12px;line-height:1.6;color:#cad3ff;">
+              Enviado pelo formulário de <a href="https://luislopes.dev.br" style="color:#ffffff;text-decoration:none;font-weight:600;">luislopes.dev.br</a>.
+              Responder a este e-mail também vai direto para {{ msg.name }}.
             </td>
           </tr>
 
